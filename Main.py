@@ -2,7 +2,7 @@ import requests
 from Entry import chose_place
 import Widget
 
-api_key = #insert your api key here
+api_key = #place your API key from openweather.org/api here
 units = "metric"
 city = chose_place()
 

@@ -14,15 +14,19 @@ def widget(data):
     cloudiness = data["clouds"]["all"]
     city_name = data["name"]
     country = data["sys"]["country"]
+
     try:
         rain = data["rain"]["1h"]
     except KeyError:
         rain = 0
 
+    if len(city_name) > 15:
+        city_name = "chosen city"
+
     main_widget = tk.Tk()
     main_widget.geometry("445x561")
     main_widget.resizable(False, False)
-    main_widget.configure(bg='black')
+    main_widget.title("WeatherApp")
 
     walking_colour_est = 10
     driving_colour_est = 10
@@ -64,6 +68,11 @@ def widget(data):
         cycling_colour_est = cycling_colour_est - 2
         ice_skating_colour_est = ice_skating_colour_est - 1
         swimming_colour_est = swimming_colour_est - 2
+    if weather_main.capitalize() == "Snow":
+        walking_colour_est = walking_colour_est - 1
+        running_colour_est = running_colour_est - 2
+        cycling_colour_est = cycling_colour_est - 3
+        driving_colour_est = driving_colour_est - 1
     if temp_min < -10 or temp_feels_like < -5:
         walking_colour_est = walking_colour_est - 1
         running_colour_est = running_colour_est - 2
@@ -87,49 +96,49 @@ def widget(data):
 
     if walking_colour_est < 5:
         walking_colour = "red"
-    elif 4 < walking_colour_est < 7:
+    elif 4 < walking_colour_est < 8:
         walking_colour = "orange"
     else:
         walking_colour = "green"
 
     if driving_colour_est < 5:
         driving_colour = "red"
-    elif 4 < driving_colour_est < 7:
+    elif 4 < driving_colour_est < 8:
         driving_colour = "orange"
     else:
         driving_colour = "green"
 
     if running_colour_est < 5:
         running_colour = "red"
-    elif 4 < running_colour_est < 7:
+    elif 4 < running_colour_est < 8:
         running_colour = "orange"
     else:
         running_colour = "green"
 
     if ice_skating_colour_est < 4:
         ice_skating_colour = "red"
-    elif 3 < ice_skating_colour_est < 6:
+    elif 3 < ice_skating_colour_est < 7:
         ice_skating_colour = "orange"
     else:
         ice_skating_colour = "green"
 
     if cycling_colour_est < 4:
         cycling_colour = "red"
-    elif 3 < cycling_colour_est < 7:
+    elif 3 < cycling_colour_est < 8:
         cycling_colour = "orange"
     else:
         cycling_colour = "green"
 
     if swimming_colour_est < 4:
         swimming_colour = "red"
-    elif 3 < swimming_colour_est < 6:
+    elif 3 < swimming_colour_est < 7:
         swimming_colour = "orange"
     else:
         swimming_colour = "green"
 
     if gym_colour_est < 4:
         gym_colour = "red"
-    elif 3 < gym_colour_est < 6:
+    elif 3 < gym_colour_est < 7:
         gym_colour = "orange"
     else:
         gym_colour = "green"
