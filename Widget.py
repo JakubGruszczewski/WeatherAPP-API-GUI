@@ -1,7 +1,8 @@
 import tkinter as tk
 
 
-def widget(data):
+def widget(data, unit):
+    print(data)
     weather_main = data["weather"][0]["main"]
     temp = data["main"]["temp"]
     temp_feels_like = data["main"]["feels_like"]
@@ -19,6 +20,21 @@ def widget(data):
         rain = data["rain"]["1h"]
     except KeyError:
         rain = 0
+    try:
+        snow = data["snow"]["1h"]
+    except KeyError:
+        snow = 0
+
+    if snow == rain:
+        precipitation = "Precipitation"
+        precipitation_value = snow
+    else:
+        if snow > rain:
+            precipitation = "Snow"
+            precipitation_value = snow
+        else:
+            precipitation = "Rain"
+            precipitation_value = rain
 
     if len(city_name) > 15:
         city_name = "chosen city"
@@ -41,13 +57,22 @@ def widget(data):
         driving_colour_est = driving_colour_est - 3
         running_colour_est = running_colour_est - 1
         swimming_colour_est = swimming_colour_est - 1
-    if rain > 0.1:
+    if rain > 1:
         walking_colour_est = walking_colour_est - 2
         running_colour_est = running_colour_est - 1
         cycling_colour_est = cycling_colour_est - 1
-    if rain > 1.5:
+    if rain > 3:
         walking_colour_est = walking_colour_est - 2
         driving_colour_est = driving_colour_est - 1
+        running_colour_est = running_colour_est - 3
+        cycling_colour_est = cycling_colour_est - 3
+    if snow > 1:
+        driving_colour_est = driving_colour_est - 1
+        running_colour_est = running_colour_est - 1
+        cycling_colour_est = cycling_colour_est - 1
+    if snow > 2.5:
+        walking_colour_est = walking_colour_est - 2
+        driving_colour_est = driving_colour_est - 2
         running_colour_est = running_colour_est - 3
         cycling_colour_est = cycling_colour_est - 3
     if cloudiness > 60:
@@ -62,7 +87,7 @@ def widget(data):
         ice_skating_colour_est = ice_skating_colour_est - 2
     if temp_max > 0:
         ice_skating_colour_est = ice_skating_colour_est - 10
-    if humidity > 80 or humidity < 15:
+    if humidity > 85 or humidity < 15:
         walking_colour_est = walking_colour_est - 1
         running_colour_est = running_colour_est - 2
         cycling_colour_est = cycling_colour_est - 2
@@ -143,18 +168,35 @@ def widget(data):
     else:
         gym_colour = "green"
 
+    temp_unit = "°C"
+    wind_speed_unit = "m/s"
+    pressure_unit = "hPa"
+    precipitation_unit = "mm"
+
+    if unit == "Imperial":
+        temp = round((temp * 9 / 5) + 32)
+        temp_unit = "°F"
+        temp_feels_like = round((temp_feels_like * 9 / 5) + 32)
+        wind_speed = round(wind_speed * 2.237, 1)
+        wind_speed_unit = "mp/h"
+        pressure = round(pressure * 0.0145038, 2)
+        pressure_unit = "psi"
+        precipitation_value = round(precipitation_value / 254, 4)
+        precipitation_unit = "in"
+
     header_label = tk.Label(main_widget, text=f"Weather in {city_name}, {country}", anchor="center",
                             height=2, width=28, font=("Fixedsys", 20), bg="#737373")
     header_label.grid(column=0, row=0, sticky='nsew')
 
     overall_data_label = tk.Label(main_widget, height=1, width=25, font=("Fixedsys", 17), bg="#7d7d7d",
-                                  text=f"{weather_main.capitalize()}, Fell-like: {round(temp_feels_like)}°C",
+                                  text=f"{weather_main.capitalize()}, Fell-like: {round(temp_feels_like)}{temp_unit}",
                                   anchor="center")
     overall_data_label.grid(column=0, row=1, sticky='nsew')
 
     data_label = tk.Label(main_widget, height=6, width=25, font=("Fixedsys", 15), bg="#9b9b9b",
-                          text=f"Temperature: {round(temp)}°C\nCloudiness: {cloudiness}%\nPressure: "
-                               f"{pressure} hPa\nWind: {round(wind_speed * 18 / 5)} km/h \nRain: {rain} mm",
+                          text=f"Temperature: {round(temp)}{temp_unit}\nCloudiness: {cloudiness}%\nPressure: "
+                               f"{pressure} {pressure_unit}\nWind: {wind_speed} {wind_speed_unit} \n"
+                               f"{precipitation}: {precipitation_value} {precipitation_unit}",
                           anchor="center")
     data_label.grid(column=0, row=2, sticky='nsew')
 
