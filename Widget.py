@@ -16,10 +16,9 @@ def widget(data, unit):
     city_name = data["name"]
     country = data["sys"]["country"]
 
-    try:
-        rain = data["rain"]["1h"]
-    except KeyError:
-        rain = 0
+    # getting snow&rain variables in two different ways
+    rain = data.get("rain", {}).get("1h", 0)
+    print(rain)
     try:
         snow = data["snow"]["1h"]
     except KeyError:

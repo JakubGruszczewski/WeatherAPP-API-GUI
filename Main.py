@@ -4,7 +4,7 @@ from Widget import widget
 from Error_Widget import display_error
 
 
-api_key = #insert your API key here
+api_key = # place your API key here
 entry_block = chose_place()
 unit = entry_block[1]
 url = f"https://api.openweathermap.org/data/2.5/weather?q={entry_block[0]}&appid={api_key}&units=metric"
